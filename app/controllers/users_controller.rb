@@ -17,8 +17,8 @@ class UsersController < ApplicationController
     #   end
     # end
 
-    render json: user, status: :ok
-    return 
+    render json: @spotify_user, status: :ok
+    return
   end 
 
 
