@@ -1,25 +1,29 @@
 class Track < ApplicationRecord
 
   #height (inches) to stride (ft)
-  
-
-
-
-
-
   def self.tempos(saved_tracks, mph, inches)
-    songs = {}
-
+    songs = []
     tempo = Track.calculate_tempo(mph.to_f, inches) 
 
     saved_tracks.each do |song| 
       features = RSpotify::AudioFeatures.find(song.id)
-      if !songs[song.name] && features.tempo <= (tempo+10) && features.tempo >= (tempo - 10)
-        songs[song.name] = features.tempo
+      if features.tempo <= (tempo+10) && features.tempo >= (tempo - 10)
+        songs << song
       end 
     end 
     return songs
-  end 
+  end
+  
+  def self.create_playlist_spotify(user, mph, tracks)
+
+    playlist = user.create_playlist!("TEMPO - Running at #{mph} MPH")
+    playlist.add_tracks!(tracks)
+    if playlist.tracks.size == tracks.length
+      return true
+    else
+      return false
+    end 
+  end
 
   private
 
@@ -56,6 +60,4 @@ class Track < ApplicationRecord
     bpm = (5280 * mph.to_f) / (stride * 60.0)
     return bpm 
   end 
-
-
 end
