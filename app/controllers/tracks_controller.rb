@@ -1,8 +1,11 @@
 class TracksController < ApplicationController
 
   def all_saved_tracks 
-    user = User.first #change this
-    hash = user[:spotify_data]
+    # find by id 
+    # 
+    #user = User.first #give this to client, you dont want this for security reasons
+    user = RSpotify::User.new(request.env['omniauth.auth'])
+    hash = user.to_hash
     spotify_user = RSpotify::User.new(hash)
     tracks = spotify_user.saved_tracks
     tempos = Track.tempos(tracks)
