@@ -15,14 +15,9 @@ class Track < ApplicationRecord
   end
   
   def self.create_playlist_spotify(user, mph, tracks)
-
     playlist = user.create_playlist!("TEMPO - Running at #{mph} MPH")
     playlist.add_tracks!(tracks)
-    if playlist.tracks.size == tracks.length
-      return true
-    else
-      return false
-    end 
+    return playlist.tracks.size == tracks.length 
   end
 
   private
