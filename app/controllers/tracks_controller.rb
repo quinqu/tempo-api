@@ -19,6 +19,14 @@ class TracksController < ApplicationController
     tracks = spotify_user.saved_tracks
     tempos = Track.tempos(tracks, params["metric"], params["speed"], params["height"])
 
+    if !tempos
+      render json: {
+        errors: [
+              "Something went wrong :("
+            ]
+      }, status: :not_found
+    end 
+    
     if Track.create_playlist_spotify(user, params["metric"], params["speed"], tempos) 
       render json: tempos, status: :ok
       return 

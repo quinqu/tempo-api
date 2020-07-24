@@ -3,7 +3,9 @@ class Track < ApplicationRecord
   def self.tempos(saved_tracks, metric, speed, inches)
     songs = []
     tempo = Track.calculate_tempo(metric, speed.to_f, inches) 
-
+    if tempo == false 
+      return tempo 
+    end 
     saved_tracks.each do |song| 
       features = RSpotify::AudioFeatures.find(song.id)
       if features.tempo <= (tempo + 10) && features.tempo >= (tempo - 10)
@@ -16,7 +18,6 @@ class Track < ApplicationRecord
   def self.create_playlist_spotify(user, metric, speed, tracks)
     playlist = user.create_playlist!("Tempo - #{speed} #{metric}")
     playlist.add_tracks!(tracks)
-    puts tracks
     return playlist.tracks.size == tracks.length 
   end
 
@@ -44,11 +45,11 @@ class Track < ApplicationRecord
 
     inches = inches.to_i
     if inches < 60 || inches > 75
-      raise
+      return false
     end 
 
     if !height_to_stride[inches]
-      raise
+      return false 
     end 
 
     bpm = 0.0
