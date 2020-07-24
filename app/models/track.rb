@@ -1,9 +1,6 @@
 class Track < ApplicationRecord
 
-  #height (inches) to stride (ft)
-  #def self.tempos(saved_tracks, mph, inches)
   def self.tempos(saved_tracks, metric, speed, inches)
-
     songs = []
     tempo = Track.calculate_tempo(metric, speed.to_f, inches) 
 
