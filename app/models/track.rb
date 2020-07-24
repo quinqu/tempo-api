@@ -6,7 +6,7 @@ class Track < ApplicationRecord
 
     saved_tracks.each do |song| 
       features = RSpotify::AudioFeatures.find(song.id)
-      if features.tempo <= (tempo + 15) && features.tempo >= (tempo - 15)
+      if features.tempo <= (tempo + 10) && features.tempo >= (tempo - 10)
         songs << song
       end 
     end 
